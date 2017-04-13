@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+        android:id="@+id/card_view"
+        android:layout_width="272dp"
+        android:layout_height="wrap_content"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:float="http://schemas.android.com/tools">
+    <android.support.v7.widget.CardView
+            app:cardCornerRadius="8dp"
+            android:layout_width="match_parent" android:layout_height="match_parent">
+
+        <LinearLayout
+                android:id="@+id/body"
+                android:orientation="vertical"
+                android:layout_width="wrap_content" android:layout_height="wrap_content">
+
+            <RelativeLayout
+                    android:id="@+id/headView"
+                    android:background="@color/colorPrimary"
+                    android:layout_width="match_parent" android:layout_height="64dp">
+
+                <TextView
+                        android:id="@+id/title_card"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerInParent="true"
+                        android:layout_marginLeft="24dp"
+                        android:text="请登陆"
+                        android:textSize="28sp"/>
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_marginTop="16dp" android:layout_marginBottom="32dp"
+                    android:layout_marginLeft="32dp" android:layout_marginRight="32dp"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        float:fletPadding="10dp"
+                        android:layout_height="wrap_content" android:layout_width="match_parent">
+
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/username"
+                            android:paddingLeft="16dp"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:textSize="14sp"
+                            android:hint="用户名"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                        android:layout_marginTop="8dp"
+                        float:fletPadding="10dp"
+                        android:layout_height="wrap_content" android:layout_width="match_parent">
+
+                    <android.support.v7.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/password"
+                            android:paddingLeft="16dp"
+                            android:layout_width="match_parent" android:layout_height="wrap_content"
+                            android:inputType="textPassword"
+                            android:textSize="14sp"
+                            android:hint="密码"/>
+                </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+
+                <FrameLayout
+                        android:id="@+id/password_confirm_view"
+                        android:layout_width="match_parent" android:layout_height="wrap_content">
+                    <com.wrapp.floatlabelededittext.FloatLabeledEditText
+                            android:layout_marginTop="8dp"
+                            float:fletPadding="10dp"
+                            android:layout_height="wrap_content" android:layout_width="match_parent">
+
+                        <android.support.v7.widget.AppCompatAutoCompleteTextView
+                                android:id="@+id/password_confirm"
+                                android:paddingLeft="16dp"
+                                android:layout_width="match_parent" android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:textSize="14sp"
+                                android:hint="确认密码"/>
+                    </com.wrapp.floatlabelededittext.FloatLabeledEditText>
+                </FrameLayout>
+
+
+            </LinearLayout>
+
+            <View
+                    android:id="@+id/:card_divider"
+                    android:layout_width="match_parent" android:layout_height="1dp"
+                    android:background="@color/colorDivider"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="32dp"/>
+
+            <!--<Button-->
+                    <!--android:id="@+id/bt_action"-->
+                    <!--android:layout_width="match_parent" android:layout_height="wrap_content"-->
+                    <!--android:layout_marginLeft="32dp" android:layout_marginRight="32dp"-->
+                    <!--android:layout_marginBottom="16dp" android:layout_marginTop="8dp"-->
+                    <!--android:background="@drawable/flattening_button_bg"-->
+                    <!--android:textSize="14sp"-->
+                    <!--android:text="登入账户"/>-->
+            <RelativeLayout
+                    android:id="@+id/bt_action"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"
+                    android:layout_marginLeft="32dp" android:layout_marginRight="32dp"
+                    android:layout_marginBottom="16dp" android:layout_marginTop="8dp"
+                    android:background="@drawable/flattening_button_bg">
+
+                <TextView
+                        android:id="@+id/bt_action_text"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_margin="16dp"
+                        android:background="#0000"
+                        android:textSize="14sp"
+                        android:text="登入账户"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+    </android.support.v7.widget.CardView>
+    <android.support.design.widget.FloatingActionButton
+            android:id="@+id/fab_action"
+            android:layout_width="48dp" android:layout_height="48dp"
+            android:src="@drawable/ic_add_black_24dp"
+            android:layout_marginRight="16dp"
+            app:layout_anchor="@id/:card_divider"
+            app:layout_anchorGravity="bottom|end"/>
+
+
+</android.support.design.widget.CoordinatorLayout>
