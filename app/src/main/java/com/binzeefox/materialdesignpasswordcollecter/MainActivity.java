@@ -43,8 +43,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
 
         cardHeadView = (RelativeLayout) findViewById(R.id.headView);
         cardView = (CoordinatorLayout) findViewById(R.id.card_view);
@@ -62,35 +60,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
 
-
-
+        initField();
         getCardSize();
         onLogin();
     }
 
+    /**
+     * 注册输入框
+     */
+    private String userName;
+    private String passWord;
+    private String passConfirm;
+    private void initField(){
 
+        userName = userNameField.getText().toString();
+        passWord = passwordField.getText().toString();
+        passConfirm = passConfirmField.getText().toString();
+    }
+
+    /**
+     * 界面切换
+     */
     private void onLogin() {
 
         cardTitleField.setText("请登录");
-//        bt_action_text.setText("登入账户");
         passConfirmView.setVisibility(View.GONE);
         fab_action.setImageResource(R.drawable.ic_add_black_24dp);
         passwordField.setText("");
         passConfirmField.setText("");
         isOnRegister = false;
-
-
     }
-
     private void onRegiester() {
         cardTitleField.setText("注册中...");
-//        bt_action_text.setText("注册账户");
         passConfirmView.setVisibility(View.VISIBLE);
         passwordField.setText("");
         fab_action.setImageResource(R.drawable.ic_keyboard_backspace_black_24dp);
         isOnRegister = true;
     }
 
+    /**
+     * 点击事件
+     * @param v
+     */
     @Override
     public void onClick(View v) {
 
@@ -108,7 +119,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case R.id.bt_action :
-                doLogin();
+                if (isOnRegister){
+                    // TODO 尚未开始进行注册算法
+                    doRegister();
+                } else {
+                    // TODO 尚未完成登陆算法
+                    doLogin();
+                }
                 break;
             default:
                 break;
@@ -116,11 +133,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     /**
-     * 获取缩放比例
+     * 获取部件尺寸
      */
     private float h1;
     private float h2;
-
 
     private void getCardSize() {
         onLogin();
@@ -146,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ObjectAnimator titleStep1 = MyAnimation.changeAlpha(cardTitleField, false, 300);
         ObjectAnimator titleStep2 = MyAnimation.changeAlpha(cardTitleField, true, 300);
         final ObjectAnimator passConfirmShow = MyAnimation.changeAlpha(passConfirmView, true, 300);
-        final ObjectAnimator passConfirmGone = MyAnimation.changeAlpha(passConfirmView, false, 300
-        );
+        final ObjectAnimator passConfirmGone = MyAnimation.changeAlpha(passConfirmView, false, 300);
 
         final AnimatorSet animSet1 = new AnimatorSet();
         final AnimatorSet animSet2 = new AnimatorSet();
@@ -160,14 +175,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         animSet1.start();
         animSet1.addListener(new AnimatorListenerAdapter() {
 
-//            @Override
-//            public void onAnimationStart(Animator animation) {
-//
-//                if (isOnRegister){
-//                    passConfirmGone.start();
-//                }
-//            }
-
             @Override
             public void onAnimationEnd(Animator animation) {
 
@@ -178,19 +185,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     onRegiester();
                     animSet3.start();
                 }
-
             }
         });
-
-
-
-
     }
 
+    /**
+     * 验证算法
+     */
     private boolean isSuccess;
     private void doLogin(){
-
-
 
         bt_action.setIndeterminateProgressMode(true);
         bt_action.setProgress(50);
@@ -228,15 +231,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         Handler handler = new Handler();
         handler.postDelayed(reset, 2500);
-
-
     }
 
+    /**
+     * 跳转
+     * @return 返回是否成功
+     */
     private boolean jumpIn() {
 
         Intent intent = new Intent(MainActivity.this, UserActivity.class);
         startActivity(intent);
         return true;
+    }
+
+    private void doRegister() {
+        // TODO 回来加上登陆算法和注册算法，同时加入各种事件，不要忘记加入提醒密码错误或者用户不存在。
+
     }
 
 }
