@@ -8,4 +8,17 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="MyTransparentStatusBarThem" parent="AppTheme">
+    </style>
+
+    <!-- 自定义跳转动画 -->
+    <style name="AnimActivityTheme" parent="MyTransparentStatusBarThem">
+        <item name="android:windowAnimationStyle">@style/FeelyouWindowAnimTheme</item>
+    </style>
+    <style name="FeelyouWindowAnimTheme">
+        <item name="android:activityOpenEnterAnimation">@anim/open_showing</item>
+        <item name="android:activityOpenExitAnimation">@anim/open_gone</item>
+        <item name="android:activityCloseEnterAnimation">@anim/backin_showing</item>
+        <item name="android:activityCloseExitAnimation">@anim/backin_gone</item>
+    </style>
 </resources>

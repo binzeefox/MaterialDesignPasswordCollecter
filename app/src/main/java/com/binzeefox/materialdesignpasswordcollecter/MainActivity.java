@@ -3,26 +3,30 @@ package com.binzeefox.materialdesignpasswordcollecter;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Intent;
+import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 
 import android.util.Log;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.animation.*;
 import android.widget.*;
 import com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation;
+import com.dd.CircularProgressButton;
+
+import java.util.Objects;
+
+import static com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation.changeAlpha;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     private boolean isOnRegister;
-    private float toY_onLogin;
-    private float toY_onRegister;
 
 
     private RelativeLayout cardHeadView;
@@ -30,8 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private FrameLayout passConfirmView;
     private TextView cardTitleField;
     private FloatingActionButton fab_action;
-    private RelativeLayout bt_action;
-    private TextView bt_action_text;
+    private CircularProgressButton bt_action;
     private EditText userNameField;
     private EditText passwordField;
     private EditText passConfirmField;
@@ -48,8 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         passConfirmView = (FrameLayout) findViewById(R.id.password_confirm_view);
         cardTitleField = (TextView) findViewById(R.id.title_card);
         fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
-        bt_action = (RelativeLayout) findViewById(R.id.bt_action);
-        bt_action_text = (TextView) findViewById(R.id.bt_action_text);
+        bt_action = (CircularProgressButton) findViewById(R.id.bt_action);
         userNameField = (EditText) findViewById(R.id.username);
         passwordField = (EditText) findViewById(R.id.password);
         passConfirmField = (EditText) findViewById(R.id.password_confirm);
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void onLogin() {
 
         cardTitleField.setText("请登录");
-        bt_action_text.setText("登入账户");
+//        bt_action_text.setText("登入账户");
         passConfirmView.setVisibility(View.GONE);
         fab_action.setImageResource(R.drawable.ic_add_black_24dp);
         passwordField.setText("");
@@ -82,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void onRegiester() {
         cardTitleField.setText("注册中...");
-        bt_action_text.setText("注册账户");
+//        bt_action_text.setText("注册账户");
         passConfirmView.setVisibility(View.VISIBLE);
         passwordField.setText("");
         fab_action.setImageResource(R.drawable.ic_keyboard_backspace_black_24dp);
@@ -98,12 +100,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (v.getId()) {
             case R.id.fab_action:
                 if (isOnRegister) {
-                    showAnimation(toY_onRegister);
+                    showAnimation();
 
                 } else {
-                    showAnimation(toY_onLogin);
+                    showAnimation();
 
                 }
+                break;
+            case R.id.bt_action :
+                doLogin();
+                break;
+            default:
+                break;
         }
     }
 
@@ -112,7 +120,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      */
     private float h1;
     private float h2;
-    private float h0;
 
 
     private void getCardSize() {
@@ -125,9 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cardView.measure(0, 0);
         h2 = cardView.getMeasuredHeight();
 
-        toY_onLogin = h2 - h1;
-        toY_onRegister = h1 - h2;
-        h0 = h1 / h2;
         Log.d("h1 value", String.valueOf(h1));
         Log.d("h2 value", String.valueOf(h2));
     }
@@ -135,60 +139,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 动画
      */
-    private void showAnimation(final float h) {
+    private void showAnimation() {
 
+        ObjectAnimator fabStep1 = MyAnimation.changeAlpha(fab_action, false, 300);
+        ObjectAnimator fabStep2 = MyAnimation.changeAlpha(fab_action, true, 300);
+        ObjectAnimator titleStep1 = MyAnimation.changeAlpha(cardTitleField, false, 300);
+        ObjectAnimator titleStep2 = MyAnimation.changeAlpha(cardTitleField, true, 300);
+        final ObjectAnimator passConfirmShow = MyAnimation.changeAlpha(passConfirmView, true, 300);
+        final ObjectAnimator passConfirmGone = MyAnimation.changeAlpha(passConfirmView, false, 300
+        );
 
-        cardView.measure(0, 0);
+        final AnimatorSet animSet1 = new AnimatorSet();
+        final AnimatorSet animSet2 = new AnimatorSet();
+        final AnimatorSet animSet3 = new AnimatorSet();
 
+        animSet1.play(fabStep1).with(titleStep1).with(passConfirmGone);
+        animSet2.play(fabStep2).with(titleStep2);
+        animSet3.play(fabStep2).with(titleStep2).with(passConfirmShow);
 
-        // 按钮及标题动画
-        MyAnimation.AlphaAct(fab_action, 1f, 0)
-                .setAnimationListener(new Animation.AnimationListener() {
+        animSet1.start();
+        animSet1.addListener(new AnimatorListenerAdapter() {
 
-                    @Override
-                    public void onAnimationStart(Animation animation) {
-                        MyAnimation.AlphaAct(cardTitleField, 1f, 0);
+//            @Override
+//            public void onAnimationStart(Animator animation) {
+//
+//                if (isOnRegister){
+//                    passConfirmGone.start();
+//                }
+//            }
 
+            @Override
+            public void onAnimationEnd(Animator animation) {
 
-                        MyAnimation.changeTextAlpha(bt_action_text, false, 250)
-                                .addListener(new AnimatorListenerAdapter() {
+                if (isOnRegister){
+                    onLogin();
+                    animSet2.start();
+                } else {
+                    onRegiester();
+                    animSet3.start();
+                }
 
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        String text;
-                                        if (isOnRegister){
-                                            text = "登入账户";
-                                        } else {
-                                            text = "注册账户";
-                                        }
-                                        bt_action_text.setText(text);
-                                        MyAnimation.changeTextAlpha(bt_action_text, true, 250);
-                                    }
-                                });
-                    }
-
-                    @Override
-                    public void onAnimationEnd(Animation animation) {
-                        if (isOnRegister) {
-                            onLogin();
-                        } else {
-                            onRegiester();
-                        }
-                        cardTitleField.setVisibility(View.VISIBLE);
-                        MyAnimation.AlphaAct(cardTitleField, 0, 1f);
-                        MyAnimation.AlphaAct(fab_action, 0, 1f);
-
-                    }
-
-                    @Override
-                    public void onAnimationRepeat(Animation animation) {
-                    }
-                });
-
-        // 卡片外观动画
+            }
+        });
 
 
 
+
+    }
+
+    private boolean isSuccess;
+    private void doLogin(){
+
+
+
+        bt_action.setIndeterminateProgressMode(true);
+        bt_action.setProgress(50);
+
+        Runnable success = new Runnable() {
+            @Override
+            public void run() {
+                bt_action.setProgress(100);
+                isSuccess = true;
+            }
+        };
+        Runnable failed = new Runnable() {
+            @Override
+            public void run() {
+                bt_action.setProgress(-1);
+            }
+        };
+        Runnable reset = new Runnable() {
+            @Override
+            public void run() {
+                bt_action.setProgress(0);
+                if (isSuccess){
+                    jumpIn();
+                }
+            }
+        };
+
+        if(Objects.equals(userNameField.getText().toString(), "狐冰杰")){
+
+            Handler handler = new Handler();
+            handler.postDelayed(success, 1500);
+        } else {
+            Handler handler = new Handler();
+            handler.postDelayed(failed, 1500);
+        }
+        Handler handler = new Handler();
+        handler.postDelayed(reset, 2500);
+
+
+    }
+
+    private boolean jumpIn() {
+
+        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        startActivity(intent);
+        return true;
     }
 
 }

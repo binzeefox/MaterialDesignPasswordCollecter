@@ -10,12 +10,15 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".MainActivity"
-                android:theme="@style/MyTransparentStatusBarThem">
+                android:theme="@style/AnimActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".UserActivity"
+                  android:theme="@style/AnimActivityTheme">
         </activity>
     </application>
 

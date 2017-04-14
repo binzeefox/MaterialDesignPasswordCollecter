@@ -183,9 +183,15 @@ public class MyAnimation {
         return true;
     }
 
-    public static ObjectAnimator changeTextAlpha (View view, boolean isShowing, int time){
+    /**
+     * 渐入渐出（返回ObjectAnimator）
+     * @param view
+     * @param isShowing
+     * @param time
+     * @return
+     */
+    public static ObjectAnimator changeAlpha(View view, boolean isShowing, int time){
 
-        // TODO 写入改变字体透明度动画
         float a;
         float b;
         if (isShowing){
@@ -197,7 +203,7 @@ public class MyAnimation {
         }
         ObjectAnimator  animator  =  ObjectAnimator.ofFloat(view,  "alpha",  a,  b);
         animator.setDuration(time);
-        animator.start();    
+//        animator.start();
         return animator;
     }
 }
