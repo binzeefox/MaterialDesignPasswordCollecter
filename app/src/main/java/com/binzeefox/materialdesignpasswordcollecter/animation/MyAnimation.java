@@ -69,7 +69,7 @@ public class MyAnimation {
     public static TranslateAnimation shakeAct(View view) {
 
         TranslateAnimation ta = new TranslateAnimation(0, 10, 0, 0);
-        ta.setInterpolator(new CycleInterpolator(2f));
+        ta.setInterpolator(new CycleInterpolator(4f));
         ta.setDuration( 500);
         view.startAnimation(ta);
         return ta;

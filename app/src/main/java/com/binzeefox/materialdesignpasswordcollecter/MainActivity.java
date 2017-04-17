@@ -14,14 +14,15 @@ import android.os.Bundle;
 
 import android.util.Log;
 import android.view.View;
-import android.view.animation.*;
 import android.widget.*;
 import com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation;
+import com.binzeefox.materialdesignpasswordcollecter.db.User;
+import com.binzeefox.materialdesignpasswordcollecter.util.ToastUtil;
 import com.dd.CircularProgressButton;
+import org.litepal.LitePal;
+import org.litepal.crud.DataSupport;
 
-import java.util.Objects;
-
-import static com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation.changeAlpha;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cardView.setFocusable(true);
         cardView.setFocusableInTouchMode(true);
 
-        initField();
+        LitePal.initialize(this);
         getCardSize();
         onLogin();
     }
@@ -71,18 +72,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private String userName;
     private String passWord;
     private String passConfirm;
-    private void initField(){
-
-        userName = userNameField.getText().toString();
-        passWord = passwordField.getText().toString();
-        passConfirm = passConfirmField.getText().toString();
-    }
 
     /**
      * 界面切换
      */
     private void onLogin() {
-
+        userNameField.setError(null);
         cardTitleField.setText("请登录");
         passConfirmView.setVisibility(View.GONE);
         fab_action.setImageResource(R.drawable.ic_add_black_24dp);
@@ -91,6 +86,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         isOnRegister = false;
     }
     private void onRegiester() {
+        userNameField.setText(userName);
         cardTitleField.setText("注册中...");
         passConfirmView.setVisibility(View.VISIBLE);
         passwordField.setText("");
@@ -100,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     /**
      * 点击事件
+     *
      * @param v
      */
     @Override
@@ -118,8 +115,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
                 break;
-            case R.id.bt_action :
-                if (isOnRegister){
+            case R.id.bt_action:
+                initField();
+                if (isOnRegister) {
                     // TODO 尚未开始进行注册算法
                     doRegister();
                 } else {
@@ -130,6 +128,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 break;
         }
+    }
+
+    /**
+     * 注册部件内容
+     */
+    private void initField() {
+
+        userName = userNameField.getText().toString();
+        passWord = passwordField.getText().toString();
+        passConfirm = passConfirmField.getText().toString();
     }
 
     /**
@@ -178,7 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onAnimationEnd(Animator animation) {
 
-                if (isOnRegister){
+                if (isOnRegister) {
                     onLogin();
                     animSet2.start();
                 } else {
@@ -189,47 +197,91 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+
+
     /**
-     * 验证算法
+     * 登陆算法
      */
-    private boolean isSuccess;
-    private void doLogin(){
+    private int loginID;
+    private boolean loginResult;
+    private void doLogin() {
 
         bt_action.setIndeterminateProgressMode(true);
         bt_action.setProgress(50);
 
-        Runnable success = new Runnable() {
+        Runnable checking = new Runnable() {
             @Override
             public void run() {
-                bt_action.setProgress(100);
-                isSuccess = true;
+                loginResult = checkLogin();
+                if (loginResult){
+                    bt_action.setProgress(100);
+                }else {
+                    bt_action.setProgress(-1);
+                }
             }
         };
-        Runnable failed = new Runnable() {
+
+        Runnable result = new Runnable() {
             @Override
             public void run() {
-                bt_action.setProgress(-1);
+                if (loginResult){
+                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
+                    intent.putExtra("userID",loginID);
+                    startActivity(intent);
+                    onLogin();
+                    bt_action.setProgress(0);
+                } else {
+                    bt_action.setProgress(0);
+                }
+            }
+        };
+
+        Handler handler = new Handler();
+        handler.postDelayed(checking, 1500);
+        handler.postDelayed(result, 2500);
+    }
+
+    /**
+     * 注册算法
+     */
+    private boolean registerResult;
+    private void doRegister() {
+
+        bt_action.setIndeterminateProgressMode(true);
+        bt_action.setProgress(50);
+        Runnable checking = new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        registerResult = checkRegister();
+                        if (registerResult){
+                            bt_action.setProgress(100);
+                        }else {
+                            bt_action.setProgress(-1);
+                        }
+                    }
+                });
             }
         };
         Runnable reset = new Runnable() {
             @Override
             public void run() {
                 bt_action.setProgress(0);
-                if (isSuccess){
-                    jumpIn();
+                if (registerResult){
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showAnimation();
+                        }
+                    });
                 }
             }
         };
 
-        if(Objects.equals(userNameField.getText().toString(), "狐冰杰")){
-
-            Handler handler = new Handler();
-            handler.postDelayed(success, 1500);
-        } else {
-            Handler handler = new Handler();
-            handler.postDelayed(failed, 1500);
-        }
         Handler handler = new Handler();
+        handler.postDelayed(checking, 1500);
         handler.postDelayed(reset, 2500);
     }
 
@@ -244,9 +296,104 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return true;
     }
 
-    private void doRegister() {
-        // TODO 回来加上登陆算法和注册算法，同时加入各种事件，不要忘记加入提醒密码错误或者用户不存在。
 
+
+
+    /**
+     * 检查登陆
+     * @return 返回是否成功
+     */
+    private boolean checkLogin(){
+
+        // 计数器i
+        int i = 0;
+        boolean isSuccess = false;
+
+        // 如果用户名或密码为空，则报错，否则i++
+        if ("".equals(userName) && "".equals(passWord)) {
+            ToastUtil.showBlankErorToast(this);
+        } else {i++;}
+
+        // 如果用户名不存在，则报错；否则i++
+        if (!"".equals(userName)) {
+            List<User> users = DataSupport.findAll(User.class);
+            boolean isGood = false;
+            for (User user : users) {
+                String mUserName = user.getUserName();
+                if (mUserName.equals(userName)) {
+                    isGood = true;
+                }
+            }
+            if (isGood) {
+                i++;
+            } else {
+                userNameField.setError("用户名不存在，请检查或前往登陆");
+            }
+        }
+
+        // 如果上述成立，则判断数据库内信息是否成立
+        if (i == 2){
+            List<User> users = DataSupport.findAll(User.class);
+            for (User user:users) {
+                String mUserName = user.getUserName();
+                String mPassWord = user.getPassWord();
+                if (userName.equals(mUserName) && passWord.equals(mPassWord)) {
+                    isSuccess = true;
+                }
+            }
+            if (!isSuccess){
+                ToastUtil.showToast(this, "密码或用户名错误");
+            }
+        }
+        return isSuccess;
+    }
+
+    /**
+     * 检测注册过程
+     * @return 返回是否成功
+     */
+    private boolean checkRegister(){
+
+        // 计数器 i
+        int i = 0;
+        boolean result = false;
+
+        // 如果用户名或密码不为空，i++；否则报错
+        if ("".equals(userName) || "".equals(passWord)) {
+            ToastUtil.showBlankErorToast(this);
+        } else {i++;}
+
+        // 如果用户名存在，则报错，同时强调fab；否则i++
+        if (!"".equals(userName)){
+            List<User> users = DataSupport.findAll(User.class);
+            boolean isGood = false;
+            for (User user:users){
+                String mUserName = user.getUserName();
+                if (mUserName.equals(userName)){
+                    userNameField.setError("用户名已存在，请尝试登陆");
+                    MyAnimation.shakeAct(fab_action);
+                    isGood = true;
+                }
+            }
+            if (!isGood){i++;}
+        }
+
+        // 如果以上全部成立，则判断密码与确认密码是否匹配。成立则i++
+        if (i == 2){
+            if (!passWord.equals(passConfirm)){
+                ToastUtil.showToast(this, "确认密码与密码不一致");
+            } else {i++;}
+        }
+
+        // 如果i == 3，则注册
+        if (i == 3){
+            User user = new User();
+            user.setUserName(userName);
+            user.setPassWord(passWord);
+            user.save();
+            result = true;
+        }
+        return result;
     }
 
 }

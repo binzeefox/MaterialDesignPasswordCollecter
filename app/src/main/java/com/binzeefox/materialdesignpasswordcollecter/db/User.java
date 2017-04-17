@@ -1,9 +1,11 @@
 package com.binzeefox.materialdesignpasswordcollecter.db;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Created by tong.xiwen on 2017/4/14.
  */
-public class User {
+public class User extends DataSupport {
 
     private int id;
     private String userName;
