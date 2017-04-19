@@ -10,7 +10,7 @@
             android:theme="@style/AppTheme">
         <activity
                 android:name=".MainActivity"
-                android:theme="@style/AnimActivityTheme">
+                android:theme="@style/AnimActivityTheme1">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -18,7 +18,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".UserActivity"
-                  android:theme="@style/AnimActivityTheme">
+                  android:theme="@style/AnimActivityTheme2">
         </activity>
     </application>
 

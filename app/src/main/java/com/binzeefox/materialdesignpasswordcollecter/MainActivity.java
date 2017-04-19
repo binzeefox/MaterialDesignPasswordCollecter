@@ -5,7 +5,9 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -17,14 +19,16 @@ import android.view.View;
 import android.widget.*;
 import com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation;
 import com.binzeefox.materialdesignpasswordcollecter.db.User;
+import com.binzeefox.materialdesignpasswordcollecter.util.BaseActivity;
 import com.binzeefox.materialdesignpasswordcollecter.util.ToastUtil;
 import com.dd.CircularProgressButton;
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
 
+import java.io.*;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
 
     private boolean isOnRegister;
@@ -64,14 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LitePal.initialize(this);
         getCardSize();
         onLogin();
+        userNameField.setText(loadLastLogin());
     }
-
-    /**
-     * 注册输入框
-     */
-    private String userName;
-    private String passWord;
-    private String passConfirm;
 
     /**
      * 界面切换
@@ -84,19 +82,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         passwordField.setText("");
         passConfirmField.setText("");
         isOnRegister = false;
+        bt_action.setIdleText("登入");
     }
     private void onRegiester() {
+        userNameField.setError(null);
         userNameField.setText(userName);
-        cardTitleField.setText("注册中...");
+        cardTitleField.setText("开始注册");
         passConfirmView.setVisibility(View.VISIBLE);
         passwordField.setText("");
         fab_action.setImageResource(R.drawable.ic_keyboard_backspace_black_24dp);
         isOnRegister = true;
+        bt_action.setIdleText("注册");
     }
 
     /**
      * 点击事件
-     *
      * @param v
      */
     @Override
@@ -133,8 +133,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 注册部件内容
      */
+    private String userName;
+    private String passWord;
+    private String passConfirm;
     private void initField() {
-
         userName = userNameField.getText().toString();
         passWord = passwordField.getText().toString();
         passConfirm = passConfirmField.getText().toString();
@@ -202,7 +204,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 登陆算法
      */
-    private int loginID;
     private boolean loginResult;
     private void doLogin() {
 
@@ -225,11 +226,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 if (loginResult){
-                    Intent intent = new Intent(MainActivity.this,UserActivity.class);
-                    intent.putExtra("userID",loginID);
-                    startActivity(intent);
+                    List<User> users = DataSupport.where("userName = ?", userName).find(User.class);
+                    int loginID = users.get(0).getId();
+                    jumpIn(loginID);
                     onLogin();
                     bt_action.setProgress(0);
+
                 } else {
                     bt_action.setProgress(0);
                 }
@@ -237,8 +239,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         Handler handler = new Handler();
-        handler.postDelayed(checking, 1500);
-        handler.postDelayed(result, 2500);
+        handler.postDelayed(checking, 1000);
+        handler.postDelayed(result, 2000);
     }
 
     /**
@@ -281,22 +283,42 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         };
 
         Handler handler = new Handler();
-        handler.postDelayed(checking, 1500);
-        handler.postDelayed(reset, 2500);
+        handler.postDelayed(checking, 1000);
+        handler.postDelayed(reset, 2000);
     }
 
     /**
      * 跳转
      * @return 返回是否成功
      */
-    private boolean jumpIn() {
+    private boolean jumpIn(int loginID) {
 
-        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        Intent intent = new Intent(MainActivity.this,UserActivity.class);
+        intent.putExtra("userID",loginID);
+        saveLastLogin();
         startActivity(intent);
+        saveLastLogin();
         return true;
     }
 
+    /**
+     * 存入最后登录用户名
+     */
+    private void saveLastLogin() {
+        SharedPreferences.Editor editor = getSharedPreferences("data", MODE_PRIVATE).edit();
+        editor.putString("lastLogin", userName);
+        editor.commit();
+    }
 
+    /**
+     * 取出最后登入用户名
+     * @return 返回用户名
+     */
+    private String loadLastLogin() {
+        SharedPreferences pref = getSharedPreferences("data", MODE_PRIVATE);
+        String lastLogin = pref.getString("lastLogin", null);
+        return lastLogin;
+    }
 
 
     /**
@@ -328,6 +350,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 i++;
             } else {
                 userNameField.setError("用户名不存在，请检查或前往登陆");
+                userNameField.requestFocus();
             }
         }
 
@@ -373,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     userNameField.setError("用户名已存在，请尝试登陆");
                     MyAnimation.shakeAct(fab_action);
                     isGood = true;
+                    userNameField.requestFocus();
                 }
             }
             if (!isGood){i++;}
@@ -396,4 +420,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return result;
     }
 
+
+    /**
+     * 重写返回键
+     */
+    @Override
+    public void onBackPressed() {
+        if (isOnRegister){
+            showAnimation();
+        } else {
+            finish();
+        }
+    }
 }

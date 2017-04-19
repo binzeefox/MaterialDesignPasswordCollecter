@@ -8,7 +8,7 @@ import org.litepal.crud.DataSupport;
 public class Account extends DataSupport {
 
     private int id;
-    private int user_id;
+    private int userID;
 
     private String accountType;
     private String accountName;
@@ -27,12 +27,12 @@ public class Account extends DataSupport {
         this.id = id;
     }
 
-    public int getUser_id() {
-        return user_id;
+    public int getUserID() {
+        return userID;
     }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+    public void setUserID(int userID) {
+        this.userID = userID;
     }
 
     public String getAccountType() {
