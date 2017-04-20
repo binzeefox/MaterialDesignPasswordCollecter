@@ -4,6 +4,7 @@ package com.binzeefox.materialdesignpasswordcollecter.fragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -54,15 +55,15 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener{
     private void testRecyclerView(){
         cardList.clear();
         Card card = new Card();
-        card.setCreateTime("创建于2016年07月03日，21时32分");
+        card.setCreateTime("2016年07月03日21:32");
         card.setAccountType("百度");
 
         for (int i = 0; i < 50; i++){
             card.setUserName("鬼狐冰杰" + String.valueOf(i));
             cardList.add(card);
         }
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CardAdapter(cardList);
         recyclerView.setAdapter(adapter);

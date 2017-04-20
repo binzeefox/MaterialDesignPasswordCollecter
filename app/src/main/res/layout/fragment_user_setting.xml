@@ -1,13 +1,38 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
              xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/user_setting_layout"
              android:layout_width="match_parent"
              android:layout_height="match_parent"
+             android:background="@drawable/setting_bg"
              tools:context="com.binzeefox.materialdesignpasswordcollecter.fragment.UserSettingFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="SETTING FRAGMENT"/>
+
+    <LinearLayout
+            android:layout_margin="14dp"
+            android:orientation="vertical"
+            android:background="@drawable/outerline"
+            android:layout_width="match_parent" android:layout_height="wrap_content">
+
+        <include layout="@layout/setting_header"/>
+
+        <View android:background="@color/colorDivider"
+              android:layout_marginTop="4dp" android:layout_marginBottom="4dp"
+              android:layout_width="match_parent" android:layout_height="1dp"/>
+
+        <include layout="@layout/setting_body"/>
+
+        <Button
+                android:id="@+id/setting_bt_clean"
+                android:text="清除用户信息"
+                android:layout_margin="4dp"
+                android:background="@drawable/buttonbg_alert"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <Button
+                android:id="@+id/setting_bt_delete"
+                android:text="删除用户"
+                android:layout_margin="4dp"
+                android:background="@drawable/buttonbg_alert"
+                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 </FrameLayout>

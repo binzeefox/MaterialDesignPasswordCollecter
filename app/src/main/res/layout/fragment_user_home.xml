@@ -1,6 +1,7 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
+        android:background="@drawable/nav_background_shape"
         android:layout_width="match_parent"
         android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
         tools:context="com.binzeefox.materialdesignpasswordcollecter.fragment.UserHomeFragment">
@@ -10,14 +11,14 @@
     <!--这里写入Home内的列表-->
     <android.support.v7.widget.RecyclerView
             android:id="@+id/home_cards"
-            android:layout_width="match_parent" android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:layout_margin="8dp"
+            android:layout_width="match_parent" android:layout_height="match_parent"/>
 
-    <android.support.design.widget.FloatingActionButton
-            android:id="@+id/fab_create"
-            android:layout_margin="16dp"
-            android:layout_gravity="bottom|end"
-            android:src="@drawable/ic_playlist_add_black_24dp"
-            android:layout_width="56dp" android:layout_height="56dp"/>
+    <!--<android.support.design.widget.FloatingActionButton-->
+            <!--android:id="@+id/fab_create"-->
+            <!--android:layout_margin="16dp"-->
+            <!--android:layout_gravity="bottom|end"-->
+            <!--android:src="@drawable/ic_playlist_add_black_24dp"-->
+            <!--android:layout_width="56dp" android:layout_height="56dp"/>-->
 
 </FrameLayout>

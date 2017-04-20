@@ -109,6 +109,7 @@
                    android:textSize="14sp"
                    app:cpb_selectorIdle="@drawable/idle_state_selector"
                    app:cpb_selectorError="@drawable/error_state_selector"
+                   app:cpb_selectorComplete="@drawable/complete_state_selector"
                    app:cpb_colorIndicator="#CDDC39"
                    app:cpb_cornerRadius="2dp"
                    app:cpb_textComplete="成功"

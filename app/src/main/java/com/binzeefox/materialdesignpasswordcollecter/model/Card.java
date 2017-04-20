@@ -9,6 +9,15 @@ public class Card {
     private String accountType;
     private String userName;
     private String createTime;
+    private String comment;
+
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+        this.comment = comment;
+    }
 
     public String getAccountType() {
         return accountType;

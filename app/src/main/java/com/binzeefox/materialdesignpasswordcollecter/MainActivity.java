@@ -21,6 +21,7 @@ import com.binzeefox.materialdesignpasswordcollecter.animation.MyAnimation;
 import com.binzeefox.materialdesignpasswordcollecter.db.User;
 import com.binzeefox.materialdesignpasswordcollecter.util.BaseActivity;
 import com.binzeefox.materialdesignpasswordcollecter.util.ToastUtil;
+import com.binzeefox.materialdesignpasswordcollecter.util.UserUtil;
 import com.dd.CircularProgressButton;
 import org.litepal.LitePal;
 import org.litepal.crud.DataSupport;
@@ -83,7 +84,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         passConfirmField.setText("");
         isOnRegister = false;
         bt_action.setIdleText("登入");
+        bt_action.setCompleteText("登入成功");
+        bt_action.setErrorText("登入失败");
+        bt_action.setText("登入");
     }
+
     private void onRegiester() {
         userNameField.setError(null);
         userNameField.setText(userName);
@@ -93,10 +98,14 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         fab_action.setImageResource(R.drawable.ic_keyboard_backspace_black_24dp);
         isOnRegister = true;
         bt_action.setIdleText("注册");
+        bt_action.setErrorText("注册失败");
+        bt_action.setCompleteText("注册成功");
+        bt_action.setText("注册");
     }
 
     /**
      * 点击事件
+     *
      * @param v
      */
     @Override
@@ -104,7 +113,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
         cardView.requestFocus();
         cardView.requestFocusFromTouch();
-
         switch (v.getId()) {
             case R.id.fab_action:
                 if (isOnRegister) {
@@ -112,7 +120,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
                 } else {
                     showAnimation();
-
                 }
                 break;
             case R.id.bt_action:
@@ -136,6 +143,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private String userName;
     private String passWord;
     private String passConfirm;
+
     private void initField() {
         userName = userNameField.getText().toString();
         passWord = passwordField.getText().toString();
@@ -200,11 +208,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     }
 
 
-
     /**
      * 登陆算法
      */
     private boolean loginResult;
+
     private void doLogin() {
 
         bt_action.setIndeterminateProgressMode(true);
@@ -213,10 +221,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Runnable checking = new Runnable() {
             @Override
             public void run() {
-                loginResult = checkLogin();
-                if (loginResult){
+                loginResult = UserUtil.checkLogin(MainActivity.this, userNameField, userName, passWord);
+                if (loginResult) {
                     bt_action.setProgress(100);
-                }else {
+                } else {
                     bt_action.setProgress(-1);
                 }
             }
@@ -225,7 +233,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         Runnable result = new Runnable() {
             @Override
             public void run() {
-                if (loginResult){
+                if (loginResult) {
                     List<User> users = DataSupport.where("userName = ?", userName).find(User.class);
                     int loginID = users.get(0).getId();
                     jumpIn(loginID);
@@ -247,6 +255,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      * 注册算法
      */
     private boolean registerResult;
+
     private void doRegister() {
 
         bt_action.setIndeterminateProgressMode(true);
@@ -257,10 +266,11 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        registerResult = checkRegister();
-                        if (registerResult){
+                        registerResult = UserUtil.checkRegister(MainActivity.this, fab_action, userNameField,
+                                userName, passWord, passConfirm);
+                        if (registerResult) {
                             bt_action.setProgress(100);
-                        }else {
+                        } else {
                             bt_action.setProgress(-1);
                         }
                     }
@@ -271,7 +281,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             @Override
             public void run() {
                 bt_action.setProgress(0);
-                if (registerResult){
+                if (registerResult) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -293,11 +303,10 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
      */
     private boolean jumpIn(int loginID) {
 
-        Intent intent = new Intent(MainActivity.this,UserActivity.class);
-        intent.putExtra("userID",loginID);
+        Intent intent = new Intent(MainActivity.this, UserActivity.class);
+        intent.putExtra("userID", loginID);
         saveLastLogin();
         startActivity(intent);
-        saveLastLogin();
         return true;
     }
 
@@ -312,6 +321,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     /**
      * 取出最后登入用户名
+     *
      * @return 返回用户名
      */
     private String loadLastLogin() {
@@ -320,113 +330,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         return lastLogin;
     }
 
-
-    /**
-     * 检查登陆
-     * @return 返回是否成功
-     */
-    private boolean checkLogin(){
-
-        // 计数器i
-        int i = 0;
-        boolean isSuccess = false;
-
-        // 如果用户名或密码为空，则报错，否则i++
-        if ("".equals(userName) && "".equals(passWord)) {
-            ToastUtil.showBlankErorToast(this);
-        } else {i++;}
-
-        // 如果用户名不存在，则报错；否则i++
-        if (!"".equals(userName)) {
-            List<User> users = DataSupport.findAll(User.class);
-            boolean isGood = false;
-            for (User user : users) {
-                String mUserName = user.getUserName();
-                if (mUserName.equals(userName)) {
-                    isGood = true;
-                }
-            }
-            if (isGood) {
-                i++;
-            } else {
-                userNameField.setError("用户名不存在，请检查或前往登陆");
-                userNameField.requestFocus();
-            }
-        }
-
-        // 如果上述成立，则判断数据库内信息是否成立
-        if (i == 2){
-            List<User> users = DataSupport.findAll(User.class);
-            for (User user:users) {
-                String mUserName = user.getUserName();
-                String mPassWord = user.getPassWord();
-                if (userName.equals(mUserName) && passWord.equals(mPassWord)) {
-                    isSuccess = true;
-                }
-            }
-            if (!isSuccess){
-                ToastUtil.showToast(this, "密码或用户名错误");
-            }
-        }
-        return isSuccess;
-    }
-
-    /**
-     * 检测注册过程
-     * @return 返回是否成功
-     */
-    private boolean checkRegister(){
-
-        // 计数器 i
-        int i = 0;
-        boolean result = false;
-
-        // 如果用户名或密码不为空，i++；否则报错
-        if ("".equals(userName) || "".equals(passWord)) {
-            ToastUtil.showBlankErorToast(this);
-        } else {i++;}
-
-        // 如果用户名存在，则报错，同时强调fab；否则i++
-        if (!"".equals(userName)){
-            List<User> users = DataSupport.findAll(User.class);
-            boolean isGood = false;
-            for (User user:users){
-                String mUserName = user.getUserName();
-                if (mUserName.equals(userName)){
-                    userNameField.setError("用户名已存在，请尝试登陆");
-                    MyAnimation.shakeAct(fab_action);
-                    isGood = true;
-                    userNameField.requestFocus();
-                }
-            }
-            if (!isGood){i++;}
-        }
-
-        // 如果以上全部成立，则判断密码与确认密码是否匹配。成立则i++
-        if (i == 2){
-            if (!passWord.equals(passConfirm)){
-                ToastUtil.showToast(this, "确认密码与密码不一致");
-            } else {i++;}
-        }
-
-        // 如果i == 3，则注册
-        if (i == 3){
-            User user = new User();
-            user.setUserName(userName);
-            user.setPassWord(passWord);
-            user.save();
-            result = true;
-        }
-        return result;
-    }
-
-
     /**
      * 重写返回键
      */
     @Override
     public void onBackPressed() {
-        if (isOnRegister){
+        if (isOnRegister) {
             showAnimation();
         } else {
             finish();

@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView
         xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_margin="4dp"
         android:layout_width="match_parent" android:layout_height="wrap_content"
         xmlns:app="http://schemas.android.com/apk/res-auto"
+        app:cardCornerRadius="4dp"
         android:background="@color/colorPrimary">
 
     <LinearLayout
@@ -11,36 +13,51 @@
             android:layout_width="match_parent" android:layout_height="wrap_content">
 
         <!--<FrameLayout-->
-                <!--android:background="@color/colorPrimary"-->
-                <!--android:layout_width="match_parent" android:layout_height="32dp"/>-->
+        <!--android:background="@color/colorPrimary"-->
+        <!--android:layout_width="match_parent" android:layout_height="32dp"/>-->
 
-        <TextView
-                android:id="@+id/card_type"
-                android:text="XXX账户"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="16dp"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <TextView
+                    android:gravity="center_horizontal"
+                    android:id="@+id/card_type"
+                    android:text="XXX账户"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+
+
+        </LinearLayout>
+
+        <View
+                android:layout_width="match_parent" android:layout_height="1dp"
+                android:background="@color/colorPrimaryDark"/>
 
         <LinearLayout
                 android:orientation="vertical"
                 android:layout_margin="8dp"
-                android:background="@drawable/roundcorner_white"
                 android:layout_width="match_parent" android:layout_height="wrap_content">
 
             <LinearLayout
+                    android:orientation="vertical"
                     android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
                     android:layout_marginLeft="16dp" android:layout_marginRight="16dp"
                     android:layout_width="match_parent" android:layout_height="wrap_content">
 
                 <TextView
-                        android:text="用户名："
+                        android:padding="4dp"
+                        android:text="用户名"
+                        android:background="@drawable/username_bg"
                         android:textSize="14sp"
+                        android:textStyle="bold"
                         android:layout_width="wrap_content" android:layout_height="wrap_content"/>
 
                 <TextView
                         android:id="@+id/card_name"
+                        android:layout_marginLeft="8dp"
+                        android:gravity="center"
                         android:textSize="14sp"
                         android:textStyle="bold"
                         android:text="xxx"
@@ -54,11 +71,46 @@
 
             <TextView
                     android:id="@+id/card_time"
-                    android:gravity="end"
-                    android:text="创建于 xxxx年xx月xx日，xx时xx分"
-                    android:layout_marginTop="8dp" android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp" android:layout_marginRight="16dp"
-                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+                    android:gravity="center"
+                    android:text="xxxx年xx月xx日xx:xx"
+                    android:layout_width="match_parent" android:layout_height="match_parent"/>
+
+            <!--<TextView-->
+                    <!--android:text="备注:"-->
+                    <!--android:layout_marginLeft="20sp"-->
+                    <!--android:layout_marginTop="8dp"-->
+                    <!--android:layout_width="0dp" android:layout_height="0dp"/>-->
+
+            <!--<EditText-->
+                    <!--android:id="@+id/card_comment"-->
+                    <!--android:minLines="4"-->
+                    <!--android:padding="7sp"-->
+                    <!--android:gravity="start"-->
+                    <!--android:text=""-->
+                    <!--android:layout_marginTop="4dp" android:layout_marginBottom="16dp"-->
+                    <!--android:layout_marginLeft="16dp" android:layout_marginRight="16dp"-->
+                    <!--android:background="@drawable/roundcorner_text"-->
+                    <!--android:layout_width="0dp" android:layout_height="0dp"/>-->
+
+            <!--<LinearLayout-->
+            <!--android:orientation="vertical"-->
+            <!--android:layout_width="match_parent" android:layout_height="wrap_content">-->
+            <!--<TextView-->
+            <!--android:text="创建于"-->
+            <!--android:textSize="14sp"-->
+            <!--android:padding="4dp"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:gravity="start"-->
+            <!--android:layout_width="wrap_content" android:layout_height="wrap_content"/>-->
+            <!--<TextView-->
+            <!--android:id="@+id/card_time"-->
+            <!--android:gravity="end"-->
+            <!--android:text="xxxx年xx月xx日，xx时xx分"-->
+            <!--android:layout_marginTop="8dp" android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginLeft="16dp" android:layout_marginRight="16dp"-->
+            <!--android:layout_width="match_parent" android:layout_height="wrap_content"/>-->
+            <!--</LinearLayout>-->
         </LinearLayout>
         <View android:layout_width="match_parent" android:layout_height="1dp"
               android:background="@color/colorDivider"/>

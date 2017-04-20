@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.binzeefox.materialdesignpasswordcollecter.R;
 import com.binzeefox.materialdesignpasswordcollecter.model.Card;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,13 +19,14 @@ import java.util.List;
 public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
 
     private Context mContext;
-    private List<Card> mCardList;
+    private List<Card> mCardList = new ArrayList<>();
 
     static class ViewHolder extends RecyclerView.ViewHolder{
         CardView cardView;
         TextView cardType;
         TextView cardName;
         TextView cardTime;
+//        TextView cardComment;
 
         public ViewHolder(View view){
             super(view);
@@ -32,10 +34,12 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
             cardType = (TextView) view.findViewById(R.id.card_type);
             cardName = (TextView) view.findViewById(R.id.card_name);
             cardTime = (TextView) view.findViewById(R.id.card_time);
+//            cardComment = (TextView) view.findViewById(R.id.card_comment);
         }
     }
 
     public CardAdapter(List<Card> cardList) {
+        mCardList.clear();
         mCardList = cardList;
     }
 
@@ -54,6 +58,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
         holder.cardType.setText(card.getAccountType());
         holder.cardName.setText(card.getUserName());
         holder.cardTime.setText(card.getCreateTime());
+//        holder.cardComment.setText(card.getComment());
     }
 
     @Override

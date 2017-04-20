@@ -27,13 +27,21 @@
         <!--这里是即将替换的fragment-->
         <FrameLayout
                 android:id="@+id/fragment_place"
+
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:layout_width="match_parent" android:layout_height="match_parent">
 
-            <fragment android:layout_width="match_parent" android:layout_height="match_parent"
-                      android:name="com.binzeefox.materialdesignpasswordcollecter.fragment.UserHomeFragment"
-                      tools:layout="@layout/fragment_user_home"/>
+            <!--<fragment android:layout_width="match_parent" android:layout_height="match_parent"-->
+                      <!--android:name="com.binzeefox.materialdesignpasswordcollecter.fragment.UserHomeFragment"-->
+                      <!--tools:layout="@layout/fragment_user_home"/>-->
         </FrameLayout>
+
+        <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab_create"
+                android:layout_margin="16dp"
+                android:layout_gravity="bottom|end"
+                android:src="@drawable/ic_playlist_add_black_24dp"
+                android:layout_width="56dp" android:layout_height="56dp"/>
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
