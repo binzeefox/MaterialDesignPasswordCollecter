@@ -128,8 +128,6 @@ public class MyAnimation {
             animator.start();
         }
 
-
-
         return true;
     }
 

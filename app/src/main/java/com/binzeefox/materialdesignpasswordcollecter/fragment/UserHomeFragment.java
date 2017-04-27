@@ -62,8 +62,9 @@ public class UserHomeFragment extends Fragment implements View.OnClickListener{
             card.setUserName("鬼狐冰杰" + String.valueOf(i));
             cardList.add(card);
         }
-        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+//        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(),2);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
         adapter = new CardAdapter(cardList);
         recyclerView.setAdapter(adapter);

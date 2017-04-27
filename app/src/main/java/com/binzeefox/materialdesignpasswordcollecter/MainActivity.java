@@ -14,6 +14,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
 import android.widget.*;
@@ -35,8 +36,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     private boolean isOnRegister;
 
 
-    private RelativeLayout cardHeadView;
-    private CoordinatorLayout cardView;
+    private CardView cardView;
     private FrameLayout passConfirmView;
     private TextView cardTitleField;
     private FloatingActionButton fab_action;
@@ -50,8 +50,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        cardHeadView = (RelativeLayout) findViewById(R.id.headView);
-        cardView = (CoordinatorLayout) findViewById(R.id.card_view);
+        cardView = (CardView) findViewById(R.id.card_view);
         passConfirmView = (FrameLayout) findViewById(R.id.password_confirm_view);
         cardTitleField = (TextView) findViewById(R.id.title_card);
         fab_action = (FloatingActionButton) findViewById(R.id.fab_action);
@@ -206,7 +205,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             }
         });
     }
-
 
     /**
      * 登陆算法

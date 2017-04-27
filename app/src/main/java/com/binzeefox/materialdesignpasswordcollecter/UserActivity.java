@@ -3,11 +3,14 @@ package com.binzeefox.materialdesignpasswordcollecter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -15,30 +18,26 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
+import android.transition.Fade;
+import android.transition.Slide;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.TextView;
-import com.binzeefox.materialdesignpasswordcollecter.adapter.CardAdapter;
 import com.binzeefox.materialdesignpasswordcollecter.db.Account;
 import com.binzeefox.materialdesignpasswordcollecter.db.User;
 import com.binzeefox.materialdesignpasswordcollecter.fragment.UserAboutFragment;
 import com.binzeefox.materialdesignpasswordcollecter.fragment.UserHomeFragment;
 import com.binzeefox.materialdesignpasswordcollecter.fragment.UserSearchFragment;
 import com.binzeefox.materialdesignpasswordcollecter.fragment.UserSettingFragment;
-import com.binzeefox.materialdesignpasswordcollecter.model.Card;
 import com.binzeefox.materialdesignpasswordcollecter.util.ActivityCollector;
 import com.binzeefox.materialdesignpasswordcollecter.util.BaseActivity;
 import org.litepal.crud.DataSupport;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.litepal.crud.DataSupport.find;
@@ -69,6 +68,7 @@ public class UserActivity extends BaseActivity {
     };
 
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +77,12 @@ public class UserActivity extends BaseActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         fab_create = (FloatingActionButton) findViewById(R.id.fab_create);
+        fab_create.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleOnClickFab();
+            }
+        });
         homeCards = (RecyclerView) findViewById(R.id.home_cards);
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -96,7 +102,6 @@ public class UserActivity extends BaseActivity {
         // 注册fragment区域
         fragmentPlace = (FrameLayout) findViewById(R.id.fragment_place);
         replaceFragment(new UserHomeFragment());
-
     }
 
     /**
@@ -158,17 +163,21 @@ public class UserActivity extends BaseActivity {
             nav_count.setText("您已记录了" + String.valueOf(queryAccountCount(userID)) + "条信息");
         }
         navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                mDrawerLayout.closeDrawers();
-                handleNavSwitch(item.getItemId());
+//                if (item.getItemId() != R.id.nav_create) {
+//                    mDrawerLayout.closeDrawers();
+//                }
+                handleNavSwitch(item);
                 return true;
             }
 
             // 判断选中的菜单
-            private void handleNavSwitch(int id) {
+            @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+            private void handleNavSwitch(MenuItem item) {
 
-                switch (id) {
+                switch (item.getItemId()) {
                     case R.id.nav_home:
                         replaceFragment(new UserHomeFragment());
                         toolbar.setTitle("您的账号");
@@ -183,6 +192,12 @@ public class UserActivity extends BaseActivity {
                         break;
                     case R.id.nav_create:
                         //TODO 添加算法
+                        getWindow().setExitTransition(new Explode());
+                        getWindow().setEnterTransition(new Explode());
+                        ActivityOptionsCompat options = ActivityOptionsCompat.makeSceneTransitionAnimation(UserActivity.this);
+                        Intent intent = new Intent(UserActivity.this, CreateItemActivity.class);
+                        intent.putExtra("userID", userID);
+                        startActivity(intent, options.toBundle());
                         break;
                     case R.id.nav_setting:
                         replaceFragment(new UserSettingFragment());
@@ -244,6 +259,19 @@ public class UserActivity extends BaseActivity {
         transaction.commit();
     }
 
+    /**
+     * 通过fab跳转入添加界面
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private void handleOnClickFab(){
+        getWindow().setExitTransition(new Explode());
+        getWindow().setEnterTransition(new Explode());
+        ActivityOptionsCompat options = ActivityOptionsCompat
+                .makeSceneTransitionAnimation(UserActivity.this, fab_create, getString(R.string.user_fab));
+        Intent intent = new Intent(UserActivity.this, CreateItemActivity.class);
+        intent.putExtra("userID", userID);
+        startActivity(intent, options.toBundle());
+    }
 
     /**
      * 重写返回键

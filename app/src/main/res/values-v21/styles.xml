@@ -3,4 +3,23 @@
     <style name="MyTransparentStatusBarThem" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
+    <style name="MyColorPrimaryStatusBarTheme" parent="AppTheme">
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AnimActivityTheme2" parent="MyColorPrimaryStatusBarTheme">
+        <item name="android:windowAnimationStyle">@style/FeelyouWindowAnimTheme2</item>
+    </style>
+    <style name="FeelyouWindowAnimTheme1">
+        <!--<item name="android:activityOpenEnterAnimation">@anim/open_showing</item>-->
+        <!--<item name="android:activityOpenExitAnimation">@anim/open_gone</item>-->
+        <item name="android:activityCloseEnterAnimation">@anim/backin_showing</item>
+        <item name="android:activityCloseExitAnimation">@anim/backin_gone</item>
+    </style>
+    <style name="FeelyouWindowAnimTheme2">
+        <item name="android:activityOpenEnterAnimation">@anim/open_showing</item>
+        <item name="android:activityOpenExitAnimation">@anim/open_gone</item>
+        <!--<item name="android:activityCloseEnterAnimation">@anim/backin_showing</item>-->
+        <!--<item name="android:activityCloseExitAnimation">@anim/backin_gone</item>-->
+    </style>
 </resources>

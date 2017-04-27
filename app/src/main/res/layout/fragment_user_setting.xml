@@ -21,18 +21,24 @@
 
         <include layout="@layout/setting_body"/>
 
-        <Button
-                android:id="@+id/setting_bt_clean"
-                android:text="清除用户信息"
-                android:layout_margin="4dp"
-                android:background="@drawable/buttonbg_alert"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
-        <Button
-                android:id="@+id/setting_bt_delete"
-                android:text="删除用户"
-                android:layout_margin="4dp"
-                android:background="@drawable/buttonbg_alert"
-                android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_marginLeft="16dp" android:layout_marginRight="16dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="match_parent" android:layout_height="match_parent">
+            <Button
+                    android:id="@+id/setting_bt_clean"
+                    android:text="清除用户信息"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/buttonbg_alert"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+            <Button
+                    android:id="@+id/setting_bt_delete"
+                    android:text="删除用户"
+                    android:layout_margin="4dp"
+                    android:background="@drawable/buttonbg_alert"
+                    android:layout_width="match_parent" android:layout_height="wrap_content"/>
+        </LinearLayout>
     </LinearLayout>
 
 </FrameLayout>

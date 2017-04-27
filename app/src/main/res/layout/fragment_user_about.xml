@@ -3,55 +3,61 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent" xmlns:app="http://schemas.android.com/apk/res-auto"
               android:orientation="vertical"
-
+              android:padding="16dp"
+              android:paddingTop="64dp"
               tools:context="com.binzeefox.materialdesignpasswordcollecter.fragment.UserAboutFragment">
 
 
+    <!--<LinearLayout-->
+    <!--android:orientation="vertical"-->
+    <!--android:padding="16dp"-->
+    <!--android:paddingTop="64dp"-->
+    <!--android:layout_width="match_parent" android:layout_height="match_parent">-->
 
-    <LinearLayout
-            android:orientation="vertical"
-            android:padding="32dp"
-            android:paddingTop="64dp"
+    <TextView
+            android:layout_gravity="center_horizontal"
+            android:layout_width="match_parent" android:layout_height="wrap_content"
+            android:text="关于该软件"
+            android:textSize="34sp"/>
+
+
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent" android:layout_height="wrap_content">
+
+            <TextView
+                    android:layout_marginTop="16dp"
+                    android:text="声明："
+                    android:textSize="24sp"
+                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+                <TextView
+                        android:layout_marginTop="8dp"
+                        android:textSize="24sp"
+                        android:inputType="textMultiLine"
+                        android:text="    出于安全性考虑，请勿将该软件内容出示给他人操作，也请避免使用该软件保存高价值账号，以免丢失重要信息或财产。"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+                <TextView
+                        android:layout_marginTop="8dp"
+                        android:textSize="24sp"
+                        android:inputType="textMultiLine"
+                        android:text="    我只是只小狐狸，我赔不起的。。。"
+                        android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+            </LinearLayout>
+        </LinearLayout>
+    <RelativeLayout
+            android:padding="16dp"
             android:layout_width="match_parent" android:layout_height="match_parent">
 
         <TextView
-                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp"
+                android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
                 android:layout_width="wrap_content" android:layout_height="wrap_content"
-                android:text="关于该软件"
-                android:textSize="34sp"/>
-        <TextView
-                android:layout_marginTop="16dp"
-                android:text="声明："
-                android:textSize="24sp"
-                android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        <LinearLayout
-                android:orientation="vertical"
-                android:layout_marginLeft="14dp"
-                android:layout_width="match_parent" android:layout_height="wrap_content">
-
-
-            <TextView
-                    android:layout_marginTop="8dp"
-                    android:layout_marginLeft="48dp"
-                    android:textSize="24sp"
-                    android:text="出于安全性考虑，请不"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-            <TextView
-                    android:textSize="24sp"
-                    android:text="要将该软件内容出示给他人操作，也请避免使用该软件保存高价值账号，以免丢失重要信息或财产。
-
-
-                我只是个孩子。。我赔不起的"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"/>
-        </LinearLayout>
-
-        <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
-
-            <TextView
-                    android:layout_marginBottom="16dp" android:layout_marginRight="32dp"
-                    android:layout_alignParentBottom="true" android:layout_alignParentRight="true"
-                    android:layout_width="wrap_content" android:layout_height="wrap_content"
-                    android:text="——作者：狐冰杰"/>
-        </RelativeLayout>
-    </LinearLayout>
+                android:text="——作者：狐冰杰"/>
+    </RelativeLayout>
 </LinearLayout>

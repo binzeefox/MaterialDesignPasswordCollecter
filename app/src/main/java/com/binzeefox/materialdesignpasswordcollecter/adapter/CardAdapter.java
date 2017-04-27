@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.TextView;
 import com.binzeefox.materialdesignpasswordcollecter.R;
 import com.binzeefox.materialdesignpasswordcollecter.model.Card;
@@ -22,7 +23,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
     private List<Card> mCardList = new ArrayList<>();
 
     static class ViewHolder extends RecyclerView.ViewHolder{
-        CardView cardView;
+        FrameLayout cardView;
         TextView cardType;
         TextView cardName;
         TextView cardTime;
@@ -30,7 +31,7 @@ public class CardAdapter extends RecyclerView.Adapter<CardAdapter.ViewHolder>{
 
         public ViewHolder(View view){
             super(view);
-            cardView = (CardView) view;
+            cardView = (FrameLayout) view;
             cardType = (TextView) view.findViewById(R.id.card_type);
             cardName = (TextView) view.findViewById(R.id.card_name);
             cardTime = (TextView) view.findViewById(R.id.card_time);

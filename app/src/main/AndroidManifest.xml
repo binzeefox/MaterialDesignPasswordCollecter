@@ -17,8 +17,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".UserActivity"
-                  android:theme="@style/AnimActivityTheme2">
+        <activity
+                android:name=".UserActivity"
+                android:theme="@style/AnimActivityTheme2">
+        </activity>
+        <activity android:name=".CreateItemActivity"
+                  android:theme="@style/MyColorPrimaryStatusBarTheme">
         </activity>
     </application>
 
